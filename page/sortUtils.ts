@@ -1,6 +1,5 @@
 import type { Page } from "@playwright/test";
 
-// ฟังก์ชันสำหรับการเข้าสู่ระบบ
 export async function login(
   page: Page,
   username: string,
@@ -11,7 +10,6 @@ export async function login(
   await page.click('[data-test="login-button"]');
 }
 
-// ฟังก์ชันเรียงสินค้าตามราคาจากต่ำไปสูง
 export async function sortProductsByPriceLowToHigh(
   page: Page
 ): Promise<number[]> {
@@ -20,9 +18,10 @@ export async function sortProductsByPriceLowToHigh(
     .selectOption("lohi");
   const prices = await page.locator(".inventory_item_price").allTextContents();
   return prices.map((price) => parseFloat(price.replace("$", "")));
+  const priceNumbers = await sortProductsByPriceLowToHigh(page);
+  const sorted = [...priceNumbers].sort((a, b) => a - b);
 }
 
-// ฟังก์ชันเรียงสินค้าตามราคาจากสูงไปต่ำ
 export async function sortProductsByPriceHighToLow(
   page: Page
 ): Promise<number[]> {
@@ -33,7 +32,6 @@ export async function sortProductsByPriceHighToLow(
   return prices.map((price) => parseFloat(price.replace("$", "")));
 }
 
-// ฟังก์ชันเรียงสินค้าตามชื่อจาก A ถึง Z
 export async function sortProductsByNameAZ(page: Page): Promise<string[]> {
   await page
     .locator('[data-test="product-sort-container"]')
@@ -41,7 +39,6 @@ export async function sortProductsByNameAZ(page: Page): Promise<string[]> {
   return await page.locator(".inventory_item_name").allTextContents();
 }
 
-// ฟังก์ชันเรียงสินค้าตามชื่อจาก Z ถึง A
 export async function sortProductsByNameZA(page: Page): Promise<string[]> {
   await page
     .locator('[data-test="product-sort-container"]')

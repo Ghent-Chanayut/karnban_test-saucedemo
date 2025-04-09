@@ -7,9 +7,7 @@ import {
   sortProductsByNameZA,
 } from "../page/sortUtils";
 
-// ทดสอบการเรียงลำดับสินค้าตามราคาและชื่อสินค้า
 test.describe("ผู้ใช้สามารถเรียงลำดับสินค้าตามราคาและชื่อสินค้าได้", () => {
-  // ทำการเข้าสู่ระบบก่อนการทดสอบทุกครั้ง
   test.beforeEach(async ({ page }: { page: Page }) => {
     await page.goto("https://www.saucedemo.com/");
     await login(page, "standard_user", "secret_sauce");

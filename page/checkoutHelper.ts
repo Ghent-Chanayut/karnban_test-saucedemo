@@ -1,21 +1,59 @@
-// checkoutHelper.ts
-// checkoutHelper.ts
-import { expect, type Page } from "@playwright/test";
+import { Page, Locator, expect } from "@playwright/test";
 
-export async function fillCheckoutForm(
-  page: Page,
-  firstName: string,
-  lastName: string,
-  postalCode: string
-) {
-  await page.locator('[data-test="firstName"]').fill(firstName);
-  await page.locator('[data-test="lastName"]').fill(lastName);
-  await page.locator('[data-test="postalCode"]').fill(postalCode);
-  await page.locator('[data-test="continue"]').click();
-}
+export class CheckoutPage {
+  constructor(public page: Page) {}
 
-export async function completeCheckout(page: Page) {
-  await page.locator('[data-test="finish"]').click();
-  const thankYouMessage = page.locator(".complete-header");
-  await expect(thankYouMessage).toHaveText("Thank you for your order!");
+  public get checkoutButton() {
+    return this.page.locator('[data-test="checkout"]');
+  }
+
+  public get firstNameInput() {
+    return this.page.locator('[data-test="firstName"]');
+  }
+
+  public get lastNameInput() {
+    return this.page.locator('[data-test="lastName"]');
+  }
+
+  public get postalCodeInput() {
+    return this.page.locator('[data-test="postalCode"]');
+  }
+
+  public get continueButton() {
+    return this.page.locator('[data-test="continue"]');
+  }
+
+  public get finishButton() {
+    return this.page.locator('[data-test="finish"]');
+  }
+
+  public get errorMessage() {
+    return this.page.locator(".error-message-container");
+  }
+
+  async startCheckout() {
+    await this.checkoutButton.click();
+  }
+
+  async fillCheckoutForm(
+    firstName: string,
+    lastName: string,
+    postalCode: string
+  ) {
+    await this.firstNameInput.fill(firstName);
+    await this.lastNameInput.fill(lastName);
+    await this.postalCodeInput.fill(postalCode);
+  }
+
+  async submitForm() {
+    await this.continueButton.click();
+  }
+
+  async completeCheckout() {
+    await this.finishButton.click();
+  }
+
+  async checkErrorMessage(expectedMessage: string) {
+    await expect(this.errorMessage).toHaveText(expectedMessage);
+  }
 }
